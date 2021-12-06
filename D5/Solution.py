@@ -56,6 +56,10 @@ def isDiagonal(list):
         return True
 
 
+##################################
+###   Part 1
+##################################
+
 
 data = cleanData()
 partOneData = [] ##Same as Data but diagonal lines will be removed
@@ -71,12 +75,21 @@ pointList = []
 for i in range(0,len(partOneData)):
     if isVertical(partOneData[i]) == True:
         for j in range(min(partOneData[i][0][1],partOneData[i][1][1]),max(partOneData[i][0][1],partOneData[i][1][1])+1): #for each j in range of min y to max y
-            pointList.append('['+str(partOneData[i][0][0])+','+str(j)+']') ##Dedups points within a line
+            pointList.append('['+str(partOneData[i][0][0])+','+str(j)+']')
 
     if isHorizontal(partOneData[i]) == True:
         for j in range(min(partOneData[i][0][0],partOneData[i][1][0]),max(partOneData[i][0][0],partOneData[i][1][0])+1): #for each j in range of min x to max x
-            pointList.append('['+str(j)+','+str(partOneData[i][0][1])+']') ##Dedups points within a line
+            pointList.append('['+str(j)+','+str(partOneData[i][0][1])+']')
 #print(pointList)
 pt1Output = Counter(pointList)
 pt1OutputFiltered = {x: count for x, count in pt1Output.items() if count >= 2}
+
+print(pt1OutputFiltered)
 print('Part 1: ' + str(len(pt1OutputFiltered)))
+
+
+##################################
+###   Part 2
+##################################
+
+data = cleanData()
