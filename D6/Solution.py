@@ -1,5 +1,5 @@
-#file_path = 'D6/input.txt'
-file_path = 'D6/test.txt'
+file_path = 'D6/input.txt'
+#file_path = 'D6/test.txt'
 with open(file_path) as f:
     text = f.read()
 
@@ -29,7 +29,7 @@ print('Part 1: ' + str(len(data)))
 
 data = text.split(',')
 
-num_days = 80
+num_days = 256
 agg_list = list(range(0,9))
 for i in range(0,len(agg_list)):
     agg_list[i] = [i,0]
@@ -44,22 +44,16 @@ for j in range(0,len(data)):
 
 
 
-print(agg_list)
+#print(agg_list)
 for day in range(0,num_days):
     for i in range(0,len(agg_list)):
-        if agg_list[i][0] == 0: # Code for recently repopulated fish
-            agg_list[i] = [99,agg_list[i][1]]
-            num_fish_created = agg_list[i][1]
-        else:
-            agg_list[i] = [agg_list[i][0]-1,agg_list[i][1]]
+        agg_list[i] = [agg_list[i][0]-1,agg_list[i][1]]
     agg_list.append([8,0])
-    for i in range(0,num_fish_created):
-        agg_list[-1][1] += 1
     
     new_agg_list = []
     for i in range(0,len(agg_list)):
         
-        if agg_list[i][0] == 99:
+        if agg_list[i][0] == -1:
             reproduce_count = agg_list[i][1]
         else:
             new_agg_list.append(agg_list[i])
@@ -67,7 +61,9 @@ for day in range(0,num_days):
     for i in range(0,len(new_agg_list)):
         if new_agg_list[i][0] == 6:
             new_agg_list[i][1] += reproduce_count
-    #print('Day {} Finished',day)
+        elif new_agg_list[i][0] == 8:
+            new_agg_list[i][1] += reproduce_count
+    #print('Day %2d Finished'%(day+1) + ' ', new_agg_list)
     agg_list = new_agg_list
 
 solution = 0
