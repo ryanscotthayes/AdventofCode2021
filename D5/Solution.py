@@ -48,9 +48,9 @@ def isHorizontal(list):
         return False
 
 def isDiagonal(list):
-    if list[0][0] == list[1][0]: #If two x coords match
+    if list[0][0] == list[1][0]:
         return False
-    elif list[0][1] == list[1][1]: #If two y coords match
+    elif list[0][1] == list[1][1]:
         return False
     else:
         return True
