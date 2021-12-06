@@ -84,7 +84,6 @@ for i in range(0,len(partOneData)):
 pt1Output = Counter(pointList)
 pt1OutputFiltered = {x: count for x, count in pt1Output.items() if count >= 2}
 
-print(pt1OutputFiltered)
 print('Part 1: ' + str(len(pt1OutputFiltered)))
 
 
@@ -93,3 +92,35 @@ print('Part 1: ' + str(len(pt1OutputFiltered)))
 ##################################
 
 data = cleanData()
+partTwoData = []
+for i in range(0,len(data)):
+    partTwoData.append(data[i])   
+
+pointList = []
+for i in range(0,len(partTwoData)):
+    if isVertical(partTwoData[i]) == True:
+        for j in range(min(partTwoData[i][0][1],partTwoData[i][1][1]),max(partTwoData[i][0][1],partTwoData[i][1][1])+1): #for each j in range of min y to max y
+            pointList.append('['+str(partTwoData[i][0][0])+','+str(j)+']')
+
+    elif isHorizontal(partTwoData[i]) == True:
+        for j in range(min(partTwoData[i][0][0],partTwoData[i][1][0]),max(partTwoData[i][0][0],partTwoData[i][1][0])+1): #for each j in range of min x to max x
+            pointList.append('['+str(j)+','+str(partTwoData[i][0][1])+']')
+    
+    elif isDiagonal(partTwoData[i]) == True:
+        for j in range(0,abs(partTwoData[i][0][0]-partTwoData[i][1][0])+1):
+            if partTwoData[i][0][0] < partTwoData[i][1][0]:
+                if partTwoData[i][0][1] < partTwoData[i][1][1]:
+                    pointList.append('['+str(partTwoData[i][0][0]+j)+','+str(partTwoData[i][0][1]+j)+']')
+                else:
+                    pointList.append('['+str(partTwoData[i][0][0]+j)+','+str(partTwoData[i][0][1]-j)+']')
+            else:
+                if partTwoData[i][0][1] < partTwoData[i][1][1]:
+                    pointList.append('['+str(partTwoData[i][0][0]-j)+','+str(partTwoData[i][0][1]+j)+']')
+                else:
+                    pointList.append('['+str(partTwoData[i][0][0]-j)+','+str(partTwoData[i][0][1]-j)+']')
+
+
+pt2Output = Counter(pointList)
+pt2OutputFiltered = {x: count for x, count in pt2Output.items() if count >= 2}
+
+print('Part 2: ' + str(len(pt2OutputFiltered)))
