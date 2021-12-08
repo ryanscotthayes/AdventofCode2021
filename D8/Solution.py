@@ -1,16 +1,5 @@
-#file_path = 'D8/input.txt'
-file_path = 'D8/test.txt'
-
-#0 = length of 6
-#1 = length of 2
-#2 = length of 5
-#3 = length of 5
-#4 = length of 4
-#5 = length of 5
-#6 = length of 6
-#7 = length of 3
-#8 = length of 7
-#9 = length of 6
+file_path = 'D8/input.txt'
+#file_path = 'D8/test.txt'
 
 with open(file_path) as f:
     text = f.read()
@@ -117,22 +106,124 @@ def solveEandG(line,cipherKey):
             break
     return cipherKey
 
-def solveCandF(line,cipherKey):
-    return 'Not Implemented'
-
 def solveBandD(line,cipherKey):
-    return 'Not Implemented'
+    for i in range(0,len(line)):
+        if len(line[i]) == 5: #must be either a 2 or a 3 or a 5
+            if (cipherKey['c'][0] in line[i]) & (cipherKey['c'][1] in line[i]): # Now must be a 3
+                for letter in line[i]:
+                    if letter in cipherKey['d']:
+                        cipherKey['d'] = letter
+                        break
+                    else: 
+                        pass
+            else:
+                pass
+    for i in cipherKey['b']:
+        if i == cipherKey['d']:
+            pass
+        else:
+            cipherKey['b'] = i
+            break
+
+    return cipherKey
+
+
+def solveCandF(line,cipherKey):
+    for i in range(0,len(line)):
+        if len(line[i]) == 5: #must be either a 2 or a 3 or a 5
+            if cipherKey['b'] in line[i]: # must be a 5
+                for letter in line[i]:
+                    if letter in cipherKey['f']:
+                        cipherKey['f'] = letter
+                        break
+                    else: 
+                        pass
+            else:
+                pass
+    for i in cipherKey['c']:
+        if i == cipherKey['f']:
+            pass
+        else:
+            cipherKey['c'] = i
+            break
+    return cipherKey
+
+def Decode(cipherKey:dict, text:str):
+    new_string = ''
+    for letter in range(0,len(text)):
+        if text[letter] == cipherKey['a']:
+            new_string += 'a'
+        elif text[letter] == cipherKey['b']:
+            new_string += 'b'
+        elif text[letter] == cipherKey['c']:
+            new_string += 'c'
+        elif text[letter] == cipherKey['d']:
+            new_string += 'd'
+        elif text[letter] == cipherKey['e']:
+            new_string += 'e'
+        elif text[letter] == cipherKey['f']:
+            new_string += 'f'
+        elif text[letter] == cipherKey['g']:
+            new_string += 'g'
+        else:
+            new_string += 'z'
+   
+    return new_string
+
+def signalToAscii(text:str):
+    if text == 'abcefg':
+        ascii = '0'
+    elif text == 'cf':
+        ascii = '1'
+    elif text == 'acdeg':
+        ascii = '2'
+    elif text == 'acdfg':
+        ascii = '3'
+    elif text == 'bcdf':
+        ascii = '4'
+    elif text == 'abdfg':
+        ascii = '5'
+    elif text == 'abdefg':
+        ascii = '6'
+    elif text == 'acf':
+        ascii = '7'
+    elif text == 'abcdefg':
+        ascii = '8'
+    elif text == 'abcdfg':
+        ascii = '9'
+    else: 
+        ascii = '-1'
+    return ascii
 
 data = text.split('\n')
 
+right_side = []
+for i in range(0,len(data)):
+    right_side.append(data[i].split(' | ')[1].split(' '))
+
 full_data = []
 decodedString = []
+list_of_solutions = []
 for i in range(0,len(data)):
     full_data.append(data[i].split(' '))
 for i in range(0,len(full_data)):
+    solution = ''
     full_data[i].remove('|')
     full_data[i] = sortStrings(full_data[i])
     cipherKey = startCipherKey(full_data[i])
-    print(solveEandG(full_data[i],cipherKey))
+    cipherKey = solveEandG(full_data[i],cipherKey)
+    cipherKey = solveBandD(full_data[i],cipherKey)
+    cipherKey = solveCandF(full_data[i],cipherKey)
+    for j in range(0,len(right_side[i])):
+        right_side[i][j] = Decode(cipherKey,right_side[i][j])
+    right_side[i] = sortStrings(right_side[i])
+    for k in range(0,len(right_side[i])):
+        solution += signalToAscii(right_side[i][k])
+    list_of_solutions.append(int(solution))
 
-#print(return_data)
+pt2_answer = 0
+for i in list_of_solutions:
+    pt2_answer += i
+        
+print('Part 2 answer: ' , pt2_answer)
+
