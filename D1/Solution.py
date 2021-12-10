@@ -1,4 +1,5 @@
-file_path = 'D1\\depths.txt'
+#file_path = 'D1\\test.txt'
+file_path = 'D1\\input.txt'
 
 with open(file_path) as f:
     file = f.read()
