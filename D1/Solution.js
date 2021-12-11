@@ -1,6 +1,6 @@
 fs = require('fs');
 //Synchronously read file because my brain is too small for Async
-const data = fs.readFileSync('D1/depths.txt',
+const data = fs.readFileSync('D1/input.txt',
             {encoding:'utf8', flag:'r'});
 
 const dataArray = data.split('\n');
@@ -18,7 +18,7 @@ console.log("Question 1: " + solution );
 
 var solution_2 = 0;
 let rollingSum = []; 
-for (let i = 2; i <= dataArray.length-2; i++) { //Skip first two iterations intentionally
+for (let i = 2; i <= dataArray.length-1; i++) { //Skip first two iterations intentionally
     rollingSum[i-2] = parseInt(dataArray[i])+parseInt(dataArray[i-1])+parseInt(dataArray[i-2]);
     
 };
