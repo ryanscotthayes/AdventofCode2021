@@ -1,0 +1,6 @@
+0,forward 5
+1,down 5
+2,forward 8
+3,up 3
+4,down 8
+5,forward 2
