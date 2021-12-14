@@ -1,3 +1,4 @@
+from collections import Counter
 #file_path = 'D14/test.txt'
 file_path = 'D14/input.txt'
 
