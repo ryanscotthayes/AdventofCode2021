@@ -1,5 +1,6 @@
 #file_path = 'D15/test.txt'
 file_path = 'D15/input.txt'
+from math import floor
 
 with open(file_path) as f:
     text = f.read().split('\n')
@@ -14,7 +15,6 @@ def cleanData(text):
             workingData.append(int(letter))
         data.append(workingData)
     return data
-
 
 def createCostArray(data):
     '''
@@ -49,10 +49,25 @@ def findMinNeighborsCost(costArray,xcoord,ycoord):
     
     return min(costUp,costDown,costLeft,costRight)
 
-data = cleanData(text)
-costArray = createCostArray(data)
+    part2data = []
+    for num in range(0,5):
+        for i in range(0,len(data)):
+            part2data.append(data[i]+data[i]+data[i]+data[i]+data[i])
 
-def Part1(data,costArray):
+    for i in range(0,len(part2data)):
+        for j in range(0,len(part2data[i])):
+            if part2data[i][j] + floor(j/10) < 10:
+                part2data[i][j] += floor(j/10)
+            else:
+                part2data[i][j] = part2data[i][j] + floor(j/10) - 9
+
+            if part2data[i][j] + floor(i/10) < 10:
+                part2data[i][j] += floor(i/10)
+            else:
+                part2data[i][j] = part2data[i][j] + floor(i/10) - 9
+    return part2data
+
+def Solver(data,costArray):
     working_queue = [[0,0]]
     while len(working_queue) > 0:
         xcoord = working_queue[0][0]
@@ -75,15 +90,66 @@ def Part1(data,costArray):
         del working_queue[0]
     return costArray
 
+def prepPt2Data(data):
+    n, m = len(data), len(data[0])
+    part2data = [[0] * (5 * m) for _ in range(5 * n)]
+    for row in range(5):
+        for col in range(5):
+            for r in range(n):
+                for c in range(m):
+                    nr, nc = n * row + r, m * col + c
+                    part2data[nr][nc] = data[r][c] + row + col
+                    if part2data[nr][nc] > 9:
+                        part2data[nr][nc] -= 9
+    return part2data
+
+#######################################################
+
+data = cleanData(text)
+costArray = createCostArray(data)
+
 part1Solution = 0
-costArray = Part1(data,costArray)
-new_costArray = Part1(data,costArray)
-for i in range(0,len(new_costArray)):
-    for j in range(0,len(new_costArray[i])):
-        if i == len(new_costArray)-1 & j == len(new_costArray[i])-1:
-            part1Solution = new_costArray[i][j]
+for i in range(0,20): 
+    '''
+    This helps the map settle in since we search from top left to bottom right diagonally. 
+    Running it enough times gives the correct answer. Not sure how to programatically determine when to stop.
+    So I'll just go overboard I guess. Part 1 settled out after 3 tries
+    '''
+    costArray = Solver(data,costArray)
+
+
+for i in range(0,len(costArray)):
+    for j in range(0,len(costArray[i])):
+        if i == len(costArray)-1 & j == len(costArray[i])-1:
+            part1Solution = costArray[i][j]
+
 
 print('Part 1: ',part1Solution)
 
-for i in new_costArray:
-    print(i)
+#######################################################
+
+data = cleanData(text)
+part2data = prepPt2Data(data)
+
+# for i in range(0,len(part2data)):
+#     if i%10 == 0:
+#         print('-----------------------------------------------')
+#     print(part2data[i])
+costArray = createCostArray(part2data)
+
+part2Solution = 0
+for i in range(0,15): 
+    '''
+    This helps the map settle in since we search from top left to bottom right diagonally. 
+    Running it enough times gives the correct answer. Not sure how to programatically determine when to stop.
+    So I'll just go overboard I guess. Part 1 settled out after 3 tries
+    '''
+    costArray = Solver(part2data,costArray)
+
+
+for i in range(0,len(costArray)):
+    for j in range(0,len(costArray[i])):
+        if i == len(costArray)-1 & j == len(costArray[i])-1:
+            part2Solution = costArray[i][j]
+
+print('Part 2: ',part2Solution)
